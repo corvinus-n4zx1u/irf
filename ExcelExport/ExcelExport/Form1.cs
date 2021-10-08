@@ -20,6 +20,8 @@ namespace ExcelExport
         Excel.Application xlApp;
         Excel.Workbook xlWB;
         Excel.Worksheet xlSheet;
+        string[] headers;
+
 
 
         public Form1()
@@ -28,6 +30,7 @@ namespace ExcelExport
             LoadData();
             dataGridView1.DataSource = lakasok;
             CreateExcel();
+            FormatTable();
 
         }
 
@@ -60,7 +63,7 @@ namespace ExcelExport
 
         private void CreateTable()
         {
-            string[] headers = new string[] 
+            headers = new string[] 
             {
                     "Kód",
                     "Eladó",
@@ -123,5 +126,32 @@ namespace ExcelExport
 
             return ExcelCoordinate;
         }
+
+        private void FormatTable()
+        {
+            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+           
+            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+            int lastRowID = xlSheet.UsedRange.Rows.Count;
+            
+            Excel.Range completeTableRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, headers.Length));
+            completeTableRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+            
+            Excel.Range firstColumnRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID,1));
+            firstColumnRange.Font.Bold = true;
+            firstColumnRange.Interior.Color = Color.LightYellow;
+
+            Excel.Range lastColumnRange = xlSheet.get_Range(GetCell(1, headers.Length), GetCell(lastRowID, headers.Length));
+            lastColumnRange.Interior.Color = Color.LightGreen;
+            lastColumnRange.NumberFormat = "#,##0.00";
+
+            headerRange.Interior.Color = Color.LightBlue;
+        }
+
     }
 }
