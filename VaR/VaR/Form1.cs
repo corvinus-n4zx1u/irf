@@ -15,6 +15,7 @@ namespace VaR
         public Form1()
         {
             InitializeComponent();
+            
         }
     }
 }
