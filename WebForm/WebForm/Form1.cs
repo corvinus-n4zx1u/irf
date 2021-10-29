@@ -22,6 +22,12 @@ namespace WebForm
         public Form1()
         {
             InitializeComponent();
+            RefreshData();
+        }
+
+        private void RefreshData()
+        {
+            Rates.Clear();
             string xmlstring = Consume();
             LoadXml(xmlstring);
             dataGridView1.DataSource = Rates;
@@ -48,13 +54,13 @@ namespace WebForm
 
         }
 
-        void Consume()
+        string Consume()
         {
             MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
             GetExchangeRatesRequestBody request = new GetExchangeRatesRequestBody();
-            request.currencyNames = "EUR";
-            request.startDate = "2020-01-01";
-            request.endDate = "2020-06-30";
+            request.currencyNames = comboBox1.SelectedItem.ToString();
+            request.startDate = dateTimePickerStart.ToString();
+            request.endDate = dateTimePickerEnd.ToString();
             var response = mnbService.GetExchangeRates(request);
             string result = response.GetExchangeRatesResult;
             File.WriteAllText("export.xml", result);
@@ -80,6 +86,26 @@ namespace WebForm
                 if (unit != 0)
                     rate.Value = value / unit;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePickerStart_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePickerEnd_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }
