@@ -8,10 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WebForm.Entities;
 using WebForm.MNBServiceReference;
 
 namespace WebForm
 {
+    BindingList<RateData> Rates = new BindingList<RateData>();
     public partial class Form1 : Form
     {
         public Form1()
