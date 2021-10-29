@@ -19,14 +19,31 @@ namespace WebForm
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        BindingList<string> currencies = new BindingList<string>();
         public Form1()
         {
             InitializeComponent();
+            comboBox1.DataSource = currencies;
+            MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
+            GetCurrenciesRequestBody request = new GetCurrenciesRequestBody();
+            
+            var response = mnbService.GetCurrencies(request);
+            string result = response.GetCurrenciesResult;
+            XmlDocument vxml = new XmlDocument();
+            vxml.LoadXml(result);
+            foreach (XmlElement item in vxml.DocumentElement.FirstChild.ChildNodes)
+            {
+                currencies.Add(item.InnerText);
+
+            }
+
+
             RefreshData();
         }
 
         private void RefreshData()
         {
+            if (comboBox1.SelectedItem == null) return;
             Rates.Clear();
             string xmlstring = Consume();
             LoadXml(xmlstring);
@@ -56,6 +73,7 @@ namespace WebForm
 
         string Consume()
         {
+            
             MNBArfolyamServiceSoapClient mnbService = new MNBArfolyamServiceSoapClient();
             GetExchangeRatesRequestBody request = new GetExchangeRatesRequestBody();
             request.currencyNames = comboBox1.SelectedItem.ToString();
@@ -64,6 +82,7 @@ namespace WebForm
             var response = mnbService.GetExchangeRates(request);
             string result = response.GetExchangeRatesResult;
             File.WriteAllText("export.xml", result);
+            return result;
         }
         
         private void LoadXml(string input)
