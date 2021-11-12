@@ -1,4 +1,5 @@
-﻿using nyolcadik.Entities;
+﻿using nyolcadik.Abstractions;
+using nyolcadik.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,11 +16,18 @@ namespace nyolcadik
     {
         private List<Toy> _toys = new List<Toy>();
 
-        private ToyFactory _factory;
-        public ToyFactory IToyFactory
+
+        private Toy _nextToy;
+
+        private IToyFactory _factory;
+        public IToyFactory Factory
         {
             get { return _factory; }
-            set { _factory = value; }
+            set
+            {
+                _factory = value;
+                DisplayNext();
+            }
         }
 
         public Form1()
@@ -52,6 +60,37 @@ namespace nyolcadik
                 mainPanel.Controls.Remove(oldestToy);
                 _toys.Remove(oldestToy);
             }
+        }
+
+        private void btnSelectCar_Click(object sender, EventArgs e)
+        {
+            Factory = new IToyFactory();
+        }
+
+        private void btnSelectBall_Click(object sender, EventArgs e)
+        {
+            Factory = new BallFactory();
+        }
+
+        private void DisplayNext()
+        {
+            if (_nextToy != null)
+                Controls.Remove(_nextToy);
+            _nextToy = Factory.CreateNew();
+            _nextToy.Top = lblNext.Top + lblNext.Height + 20;
+            _nextToy.Left = lblNext.Left;
+            Controls.Add(_nextToy);
+        }
+
+        private void btnColor_Click(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            var colorPicker = new ColorDialog();
+
+            colorPicker.Color = button.BackColor;
+            if (colorPicker.ShowDialog() != DialogResult.OK)
+                return;
+            button.BackColor = colorPicker.Color;
         }
     }
 }
