@@ -22,13 +22,17 @@ namespace _10het
         public Form1()
         {
             InitializeComponent();
-            Population = GetPopulation(@"C:\Temp\nép-teszt.csv");
             BirthProbabilities = GetBirthProbabilites(@"C:\Temp\születés.csv");
             DeathProbabilities = GetDeathProbabilites(@"C:\Temp\halál.csv");
+        }
 
-            for (int year = 2005; year <= 2024; year++)
+        private void StartSimulation(int year, string csvPath)
+        {
+            Population = GetPopulation(csvPath);
+
+            for (int year = 2005; year <= EndYear; year++)
             {
-                
+
                 for (int i = 0; i < Population.Count; i++)
                 {
                     SimStep(year, Population[i]);
@@ -40,8 +44,9 @@ namespace _10het
                 int nbrOfFemales = (from x in Population
                                     where x.Gender == Gender.Female && x.IsAlive
                                     select x).Count();
-                Console.WriteLine(
-                    string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
+                textBox1.Text += string.Format(
+                    "Szimulációs év: {0}\n\tFiúk: {1}\n\tLányok: {2}\n\n", year, nbrOfMales, nbrOfFemales
+                    );
             }
         }
 
@@ -141,6 +146,44 @@ namespace _10het
                     Population.Add(újszülött);
                 }
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+            textBox1 = ofd.FileName;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            StartSimulation((int)numericUpDown1.Value, textBox1.Text);
+
         }
     }
 }
