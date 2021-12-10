@@ -61,6 +61,7 @@ namespace EvolutionExample
                 return;
             }
 
+
             gc.ResetCurrentLevel();
             foreach (var p in topPerformers)
             {
