@@ -35,7 +35,7 @@ namespace EvolutionExample
             this.Controls.Add(ga);
 
             for (int i = 0; i < 100; i++)
-                gc.AddPlayer();
+                gc.AddPlayer(nbrOfSteps);
             gc.Start();
 
 
