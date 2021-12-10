@@ -15,13 +15,14 @@ namespace EvolutionExample
     {
         GameController gc = new GameController();
         GameArea ga;
+        Brain winnerBrain = null;
 
         int populationSize = 100;
         int nbrOfSteps = 10;
         int nbrOfStepsIncrement = 10;
         int generation = 1;
 
-        Brain winnerBrain = null;
+        
 
 
         public Form1()
@@ -78,6 +79,15 @@ namespace EvolutionExample
             }
             gc.Start();
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winnerBrain.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
         }
     }
 }
